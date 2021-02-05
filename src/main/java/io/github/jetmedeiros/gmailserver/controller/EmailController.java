@@ -21,10 +21,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/emails")
+@CrossOrigin("*")
 public class EmailController {
     @Autowired
     private EmailService service;
@@ -63,20 +65,23 @@ public class EmailController {
         email.setDate(data);
         email.setUser(user);
         email.setIsread(false);
+        email.setFavorite(objDTO.isFavorite());
 
 
 //        email = service.create(email);
         return repository.save(email);
     }
 
-//    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-//    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody EmailDTO updatedObj){
-//        Email cat = service.fromDTO(updatedObj);
-//        cat.setId(id);
-//        cat = service.update(cat);
-//
-//        return ResponseEntity.ok().build();
-//    }
+    @PatchMapping("{id}/favorite")
+    public void favorite( @PathVariable Integer id ){
+        Optional<Email> email = repository.findById(id);
+        email.ifPresent( c -> {
+            boolean favorite = c.isFavorite() == Boolean.TRUE;
+            c.setFavorite(!favorite);
+            repository.save(c);
+        });
+    }
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable Integer id){

@@ -20,6 +20,15 @@ public class Email implements Serializable {
     private String title;
     private boolean isread;
     private Date date;
+    private boolean favorite;
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -29,7 +38,7 @@ public class Email implements Serializable {
 
     }
 
-    public Email(Integer id, String content, String title, boolean isread, Date date, User user) {
+    public Email(Integer id, String content, String title, boolean isread, Date date, User user, boolean favorite) {
         this.id = id;
         this.content = content;
         this.title = title;
