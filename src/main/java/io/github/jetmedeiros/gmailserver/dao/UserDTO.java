@@ -1,7 +1,5 @@
 package io.github.jetmedeiros.gmailserver.dao;
 
-import io.github.jetmedeiros.gmailserver.controller.UsuarioController;
-import io.github.jetmedeiros.gmailserver.model.Email;
 import io.github.jetmedeiros.gmailserver.model.User;
 
 import java.io.Serializable;
@@ -11,8 +9,8 @@ public class UserDTO implements Serializable {
 
 
     private Integer id;
-    private String nome;
-    private String senha;
+    private String username;
+    private String password;
 
     public UserDTO(){
 
@@ -20,8 +18,8 @@ public class UserDTO implements Serializable {
 
     public UserDTO(User obj) {
         id = obj.getId();
-        nome = obj.getNome();
-        senha = obj.getSenha();
+        username = obj.getUsername();
+        password = obj.getPassword();
     }
 
     public Integer getId() {
@@ -32,21 +30,19 @@ public class UserDTO implements Serializable {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPassword(String password) {
+        this.password = password;
     }
-
-
 }

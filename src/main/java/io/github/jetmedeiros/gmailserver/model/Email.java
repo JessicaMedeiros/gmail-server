@@ -34,17 +34,22 @@ public class Email implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Email(){
+    @ManyToOne
+    @JoinColumn(name = "cc_id")
+    private User cc;
+
+    public Email() {
 
     }
 
-    public Email(Integer id, String content, String title, boolean isread, Date date, User user, boolean favorite) {
+    public Email(Integer id, String content, String title, boolean isread, Date date, User user, boolean favorite, User cc) {
         this.id = id;
         this.content = content;
         this.title = title;
         this.isread = isread;
         this.date = date;
         this.user = user;
+        this.cc = cc;
     }
 
     public Integer getId() {
@@ -95,16 +100,24 @@ public class Email implements Serializable {
         this.date = date;
     }
 
+    public User getCc() {
+        return cc;
+    }
+
+    public void setCc(User cc) {
+        this.cc = cc;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Email email = (Email) o;
-        return isread == email.isread && id.equals(email.id) && content.equals(email.content) && title.equals(email.title) && user.equals(email.user);
+        return isread == email.isread && favorite == email.favorite && Objects.equals(id, email.id) && Objects.equals(content, email.content) && Objects.equals(title, email.title) && Objects.equals(date, email.date) && Objects.equals(user, email.user) && Objects.equals(cc, email.cc);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, content, title, isread, user);
+        return Objects.hash(id, content, title, isread, date, favorite, user, cc);
     }
 }

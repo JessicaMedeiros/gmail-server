@@ -1,9 +1,12 @@
 package io.github.jetmedeiros.gmailserver.service;
 
+import io.github.jetmedeiros.gmailserver.config.UserSS;
 import io.github.jetmedeiros.gmailserver.dao.EmailDTO;
 import io.github.jetmedeiros.gmailserver.model.Email;
 import io.github.jetmedeiros.gmailserver.model.User;
 import io.github.jetmedeiros.gmailserver.repository.EmailRepository;
+import io.github.jetmedeiros.gmailserver.repository.UserRepository;
+import io.github.jetmedeiros.gmailserver.service.exception.AuthorizationException;
 import io.github.jetmedeiros.gmailserver.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,12 @@ public class EmailService {
 
     @Autowired
     private EmailRepository repository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     public Email find(Integer id){
         Optional<Email> obj = repository.findById(id);
@@ -43,6 +52,28 @@ public class EmailService {
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return repository.findAll(pageRequest);
     }
+
+//    public Page<Email> page(Integer page, Integer linesPerPage, String orderBy, String direction){
+//        UserSS userSS = UserAuthentication.authenticated();
+//        if(userSS == null){
+//            throw new AuthorizationException("Acesso Negado");
+//        }
+//        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+//        User user = userService.find(userSS.getId());
+//        return repository.findByIdUser(user, pageRequest);
+//
+//    }
+//
+//    public Page<Email> enviados(Integer page, Integer linesPerPage, String orderBy, String direction){
+//        UserSS userSS = UserAuthentication.authenticated();
+//        if(userSS == null){
+//            throw new AuthorizationException("Acesso Negado");
+//        }
+//        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+//        User user = userService.find(userSS.getId());
+//        return repository.findByIdUser(userSS.getId(), pageRequest);
+//
+//    }
 
 //    public Email fromDTO(EmailDTO dto){
 //        return new Email(dto.getId(), dto.getContent(), dto.getTitle(), dto.isIsread(), dto.getIdUser());

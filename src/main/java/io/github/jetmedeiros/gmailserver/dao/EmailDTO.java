@@ -17,6 +17,7 @@ public class EmailDTO implements Serializable {
     private boolean favorite;
     private Integer idUser;
     private Date date;
+    private Integer cc;
 
 
     public EmailDTO(){
@@ -31,6 +32,7 @@ public class EmailDTO implements Serializable {
         idUser = obj.getUser().getId();
         date = obj.getDate();
         favorite = obj.isIsread();
+        cc = obj.getCc().getId();
     }
 
     public Integer getId() {
@@ -87,5 +89,13 @@ public class EmailDTO implements Serializable {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public Integer getCc() {
+        return cc;
+    }
+
+    public void setCc(Integer cc) {
+        this.cc = cc;
     }
 }

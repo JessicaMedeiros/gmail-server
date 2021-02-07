@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/emails")
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:4200/**")
 public class EmailController {
     @Autowired
     private EmailService service;
@@ -51,20 +52,30 @@ public class EmailController {
     public Email create(@RequestBody EmailDTO objDTO){
        // LocalDate data = LocalDate.parse(objDTO.getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         Integer idUser = objDTO.getIdUser();
+        Integer cc = objDTO.getCc();
         LocalDate date = LocalDate.now();
 
         Date data =  convertToDateViaSqlDate(date);
         User user =
                 userRepository
-                .findById(idUser)
-                .orElseThrow( () ->
-                        new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario inexistente"));
+                        .findById(idUser)
+                        .orElseThrow( () ->
+                                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario inexistente"));
+
+        User userCC =
+                userRepository
+                        .findById(cc)
+                        .orElseThrow( () ->
+                                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario inexistente"));
+
+
         Email email = new Email();
         email.setContent(objDTO.getContent());
         email.setTitle(objDTO.getTitle());
         email.setDate(data);
         email.setUser(user);
         email.setIsread(false);
+        email.setCc(userCC);
         email.setFavorite(objDTO.isFavorite());
 
 
@@ -101,7 +112,7 @@ public class EmailController {
     @RequestMapping(value = "/page", method=RequestMethod.GET)
     public ResponseEntity<Page<EmailDTO>> findPage(@RequestParam (value = "page", defaultValue = "0") Integer page,
                                                      @RequestParam (value = "linesPerPage", defaultValue = "24") Integer linesPerPage, //24 é mais responsivo
-                                                     @RequestParam (value = "orderBy", defaultValue = "name") String orderBy,
+                                                     @RequestParam (value = "orderBy", defaultValue = "date") String orderBy,
                                                      @RequestParam (value = "direction", defaultValue = "ASC") String direction){
 
         Page<Email> list = service.findPage(page, linesPerPage, orderBy, direction);
@@ -110,4 +121,17 @@ public class EmailController {
                 new EmailDTO(obj));
         return ResponseEntity.ok().body(listDTO);
     }
+
+//    @RequestMapping(value = "/enviados", method=RequestMethod.GET)
+//    public ResponseEntity<Page<Email>> enviados(@RequestParam (value = "page", defaultValue = "0") Integer page,
+//                                                   @RequestParam (value = "linesPerPage", defaultValue = "24") Integer linesPerPage, //24 é mais responsivo
+//                                                   @RequestParam (value = "orderBy", defaultValue = "date") String orderBy,
+//                                                   @RequestParam (value = "direction", defaultValue = "ASC") String direction){
+//
+//        Page<Email> list = service.enviados(page, linesPerPage, orderBy, direction);
+//        //vai percorrer a lista e fazer uma operacao para cada elemento da lista
+////        Page<EmailDTO> listDTO =  list.map(obj ->
+////                new EmailDTO(obj));
+//        return ResponseEntity.ok().body(list);
+//    }
 }
