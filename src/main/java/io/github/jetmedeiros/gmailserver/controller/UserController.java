@@ -1,6 +1,6 @@
 package io.github.jetmedeiros.gmailserver.controller;
 
-import io.github.jetmedeiros.gmailserver.dao.UserDTO;
+import io.github.jetmedeiros.gmailserver.dto.UserDTO;
 import io.github.jetmedeiros.gmailserver.model.User;
 import io.github.jetmedeiros.gmailserver.repository.UserRepository;
 import io.github.jetmedeiros.gmailserver.service.UserService;
@@ -45,6 +45,12 @@ public class UserController {
                 .path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
 
+    }
+
+    @RequestMapping(value="/username", method=RequestMethod.GET)
+    public ResponseEntity<User> find(@RequestParam(value="value") String username) {
+        User obj = service.findByUsername(username);
+        return ResponseEntity.ok().body(obj);
     }
 
 //    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)

@@ -1,4 +1,4 @@
-package io.github.jetmedeiros.gmailserver.dao;
+package io.github.jetmedeiros.gmailserver.dto;
 
 import io.github.jetmedeiros.gmailserver.model.User;
 

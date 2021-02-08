@@ -1,12 +1,8 @@
 package io.github.jetmedeiros.gmailserver.service;
 
-import io.github.jetmedeiros.gmailserver.config.UserSS;
-import io.github.jetmedeiros.gmailserver.dao.EmailDTO;
 import io.github.jetmedeiros.gmailserver.model.Email;
-import io.github.jetmedeiros.gmailserver.model.User;
 import io.github.jetmedeiros.gmailserver.repository.EmailRepository;
 import io.github.jetmedeiros.gmailserver.repository.UserRepository;
-import io.github.jetmedeiros.gmailserver.service.exception.AuthorizationException;
 import io.github.jetmedeiros.gmailserver.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +41,10 @@ public class EmailService {
     }
 
     public List<Email> findAll() {
+        return repository.findAll();
+    }
+
+    public List<Email> findAllToHome() {
         return repository.findAll();
     }
 

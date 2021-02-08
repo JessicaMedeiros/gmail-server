@@ -2,11 +2,9 @@ package io.github.jetmedeiros.gmailserver.service;
 
 
 import io.github.jetmedeiros.gmailserver.config.UserSS;
-import io.github.jetmedeiros.gmailserver.dao.UserDTO;
+import io.github.jetmedeiros.gmailserver.dto.UserDTO;
 import io.github.jetmedeiros.gmailserver.model.User;
-import io.github.jetmedeiros.gmailserver.model.enums.Perfil;
 import io.github.jetmedeiros.gmailserver.repository.UserRepository;
-import io.github.jetmedeiros.gmailserver.service.exception.AuthorizationException;
 import io.github.jetmedeiros.gmailserver.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,6 +35,11 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public User findByUsername(String username){
+        Optional<User> user = repository.findByUsername(username);
+        return user.orElseThrow(() -> new ObjectNotFoundException(
+                "Objeto não encontrado! Id: " + username + ", Tipo: " + User.class.getName()));
+    }
 
     public User find(Integer id) {
 

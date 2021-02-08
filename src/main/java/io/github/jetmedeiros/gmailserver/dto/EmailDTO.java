@@ -1,10 +1,8 @@
-package io.github.jetmedeiros.gmailserver.dao;
+package io.github.jetmedeiros.gmailserver.dto;
 
 import io.github.jetmedeiros.gmailserver.model.Email;
-import io.github.jetmedeiros.gmailserver.model.User;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
 public class EmailDTO implements Serializable {

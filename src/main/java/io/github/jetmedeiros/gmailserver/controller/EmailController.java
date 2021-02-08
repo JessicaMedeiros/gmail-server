@@ -1,8 +1,7 @@
 package io.github.jetmedeiros.gmailserver.controller;
 
-import io.github.jetmedeiros.gmailserver.dao.EmailDTO;
-import io.github.jetmedeiros.gmailserver.dao.EmailDTO;
-import io.github.jetmedeiros.gmailserver.model.Email;
+import io.github.jetmedeiros.gmailserver.dto.EmailDTO;
+import io.github.jetmedeiros.gmailserver.dto.EmailOnHomeDTO;
 import io.github.jetmedeiros.gmailserver.model.Email;
 import io.github.jetmedeiros.gmailserver.model.User;
 import io.github.jetmedeiros.gmailserver.repository.EmailRepository;
@@ -15,11 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +38,15 @@ public class EmailController {
     public ResponseEntity<Email> find(@PathVariable Integer id){
         Email obj = service.find(id);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<List<EmailOnHomeDTO>> findAllToHome(){
+        List<Email> list = service.findAll();
+        //vai percorrer a lista e fazer uma operacao para cada elemento da lista
+        List<EmailOnHomeDTO> listDTO =  list.stream().map(obj ->
+                new EmailOnHomeDTO(obj)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listDTO);
     }
     public Date convertToDateViaSqlDate(LocalDate dateToConvert) {
         return java.sql.Date.valueOf(dateToConvert);
@@ -100,14 +105,17 @@ public class EmailController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<EmailDTO>> findAll(){
-        List<Email> list = service.findAll();
-        //vai percorrer a lista e fazer uma operacao para cada elemento da lista
-        List<EmailDTO> listDTO =  list.stream().map(obj ->
-                new EmailDTO(obj)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDTO);
-    }
+
+
+
+//    @RequestMapping(method=RequestMethod.GET)
+//    public ResponseEntity<List<EmailDTO>> findAll(){
+//        List<Email> list = service.findAll();
+//        //vai percorrer a lista e fazer uma operacao para cada elemento da lista
+//        List<EmailDTO> listDTO =  list.stream().map(obj ->
+//                new EmailDTO(obj)).collect(Collectors.toList());
+//        return ResponseEntity.ok().body(listDTO);
+//    }
 
     @RequestMapping(value = "/page", method=RequestMethod.GET)
     public ResponseEntity<Page<EmailDTO>> findPage(@RequestParam (value = "page", defaultValue = "0") Integer page,

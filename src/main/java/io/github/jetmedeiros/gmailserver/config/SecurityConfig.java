@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] PUBLIC_MATCHERS = {
             "/h2-console/**",
             "/users/**",
-            "/emails/**",
+            "/emails/**"
     };
 
 
@@ -64,7 +64,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration config = new CorsConfiguration();
+        source.registerCorsConfiguration("/**", config.applyPermitDefaultValues());
+        config.setExposedHeaders(Arrays.asList("Authorization"));
         return source;
     }
 
